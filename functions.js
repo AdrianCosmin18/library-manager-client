@@ -51,9 +51,9 @@ async function  createHome(){
             let id = + obj.classList[1].split("-")[2];
             let response = await deleteCarById(id);
             if(response.length === 0){
-
+                createHome();
             }else{
-                
+                alert(response);
             }
         }
     })
