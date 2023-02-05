@@ -43,16 +43,6 @@ async function  createHome(){
             console.log(currentCar);
             createUpdateCar(currentCar);
         }
-        else if(obj.classList.contains("button-delete")){
-
-            let id = + obj.classList[1].split("-")[2];
-            let response = await deleteCarById(id);
-            if(response.length === 0){
-                createHome();
-            }else{
-                alert(response);
-            }
-        }
     })
 }
 
@@ -237,6 +227,17 @@ function createUpdateCar(car){
             createHome();
         }
         else{
+            alert(response);
+        }
+    })
+
+    let buttonDelete = document.querySelector(".button-to-delete");
+    buttonDelete.addEventListener("click", async() => {
+
+        let response = await deleteCarById(car.id);
+        if(response.length === 0){
+            createHome();
+        }else{
             alert(response);
         }
     })
