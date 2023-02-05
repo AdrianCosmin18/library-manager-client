@@ -73,6 +73,17 @@ function createAllTableRows(cars){
     return text;
 }
 
+function createAlert(message){
+    
+    let div = document.createElement("div");
+    div.innerHTML = `
+        <div class="alert alert-danger alert-dismissible" role="alert">
+        <div>${message}</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    return div;
+}
 
 
 function createNewCar(){
@@ -142,12 +153,12 @@ function createNewCar(){
         
         let response = await addCar(car);
         console.log(response);
-        if(response.length === 0){
+        if(response === "success"){
             alert(brandValue + " " + modelValue + " insert with succes");
             createHome();
         }
         else{
-            alert(response);
+            container.appendChild(createAlert(response));
         }
     });
 }

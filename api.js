@@ -56,13 +56,14 @@ async function getCarById(id){
 async function addCar(car){
     let response = await api("crudJS/car", "POST", car);
     if(response.status === 200){
-        return [];
+        return "success";
     }
     else if (response.status === 400) {
-        return response.json().then(data => {
-            return data.message;
-        });
-    }else{
+
+        let data = await response.json();
+        return data.errors[0].defaultMessage;
+
+    }else {
         throw new Error();
     }
 }
