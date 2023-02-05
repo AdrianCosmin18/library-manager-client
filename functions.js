@@ -13,8 +13,6 @@ async function  createHome(){
                 <th>Model</th>
                 <th>Weight</th>
                 <th>Availability</th>
-                <th>Update</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody class="cars-container">
@@ -38,9 +36,8 @@ async function  createHome(){
 
     carsContainer.addEventListener("click", async(e) => {
         let obj = e.target;
-        if(obj.classList.contains("button-update")){
-
-            let id = + obj.parentNode.parentNode.firstElementChild.textContent;
+        if(obj.classList.contains("card-id")){
+            let id = + obj.textContent;
             console.log(id);
             let currentCar = await getCarById(id);
             console.log(currentCar);
@@ -64,14 +61,11 @@ function createTableRow(car){
     let text = `
 
         <tr>
-            <td>${car.id}</td>
+            <td class="card-id">${car.id}</td>
             <td>${car.brand}</td>
             <td>${car.model}</td>
             <td>${car.weight}</td>
             <td>${car.isAvailable}</td>
-            <td><button type="button" class="button-update button-update-${car.id}">Update</button></td>
-            <td><button type="button" class="button-delete button-delete-${car.id}">Delete</button></td>
-
         </tr>
 
     `;
@@ -196,6 +190,9 @@ function createUpdateCar(car){
         </p>
         <p>
             <a class="button button-to-home">Cancel</a>
+        </p>
+        <p>
+            <a class="button button-to-delete">Delete</a>
         </p>
     </form>
     `
