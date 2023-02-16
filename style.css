@@ -98,3 +98,10 @@ input[type=text] {
 .error {
     color: rgb(236, 15, 15);
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

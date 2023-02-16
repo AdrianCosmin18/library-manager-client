@@ -76,15 +76,79 @@ function createAllTableRows(cars){
 function createAlert(message){
     
     let div = document.createElement("div");
+    div.classList.add("alert");
+    div.classList.add("alert");
+    div.classList.add("alert-danger");
+    div.classList.add("alert-dismissible");
+    div.role = "alert";
+
     div.innerHTML = `
-        <div class="alert alert-danger alert-dismissible" role="alert">
-        <div>${message}</div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+     
+            <div>${message}</div>
+            <button type="button" class="btn-close close-alert" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    return div;
+
+}
+
+function createPositiveAlert(message){
+    let div = document.createElement("div");
+    div.classList.add("alert");
+    div.classList.add("alert");
+    div.classList.add("alert-success");
+    div.classList.add("alert-dismissible");
+    div.role = "alert";
+
+    div.innerHTML = `
+     
+            <div>${message}</div>
+            <button type="button" class="btn-close close-alert" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
     return div;
 }
 
+
+function createSpinner(){
+
+    let div = document.createElement("div");
+    div.classList.add("spinner-border");
+    div.classList.add("text-primary");
+    div.role = "status";
+
+    div.innerHTML = `
+        <span class="visually-hidden">Loading...</span>
+    `;
+
+    return div;
+
+}
+
+function delay(){
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, 3000);
+    });
+}
+
+
+// fct care creeaza un vect de erori, daca nu E erori
+function createArrayAlert(brand, model, weight){
+    let arr = [];
+
+    let isBrandValid = isValidBrandOrModel(brand);
+    if(!isBrandValid){
+        arr.push(createAlert("The brand length has to have minim 2 characters"));
+    }
+    let isModelValid = isValidBrandOrModel(model);
+    if(!isModelValid){
+        arr.push(createAlert("Model's length must have minim 2 characters !"));
+    }
+    let isWeightValid = isValidWeight(weight);
+    if(!isWeightValid){
+        arr.push(createAlert("Weight's car must contain a valid number of minimum 100 kg"));
+    }
+
+    return arr;
+}
 
 function createNewCar(){
 
@@ -128,6 +192,7 @@ function createNewCar(){
 
     let buttonAddCar = document.querySelector(".button-to-add");
     buttonAddCar.addEventListener("click", async() => {
+
         
         let brand = document.getElementById("brand");
         let brandValue = brand.value;
@@ -144,23 +209,33 @@ function createNewCar(){
             isAvailableValue = true;
         }
 
-        let car = {
-            brand: brandValue,
-            model: modelValue,
-            weight: weightValue,
-            isAvailable: isAvailableValue
-        };
-        
-        let response = await addCar(car);
-        console.log(response);
-        if(response === "success"){
-            alert(brandValue + " " + modelValue + " insert with succes");
-            createHome();
-        }
-        else{
-            container.appendChild(createAlert(response));
+        let alertList = createArrayAlert(brandValue, modelValue, weightValue);
+        if(alertList.length > 0){
+            alertList.forEach(elem => {
+                container.appendChild(elem);
+            });
+        }else{
+            let car = {
+                brand: brandValue,
+                model: modelValue,
+                weight: weightValue,
+                isAvailable: isAvailableValue
+            };
+
+            container.innerHTML = "",
+            container.appendChild(createSpinner());
+            await delay();
+            
+            let response = await addCar(car);
+            console.log(response);
+            if(response === "success"){
+                createHome();
+                container.appendChild(createPositiveAlert("Car created with success !"));
+            }
         }
     });
+
+
 }
 
 function createUpdateCar(car){
@@ -223,22 +298,30 @@ function createUpdateCar(car){
             isAvailableValue = true;
         }
 
+        let alertList = createArrayAlert(brandValue, modelValue, weightValue);
+        if(alertList.length > 0){
+            alertList.forEach(elem => {
+                container.appendChild(elem);
+            });
+        }else{
 
-        let carDTO = {
-            brand: brandValue,
-            model: modelValue,
-            weight: weightValue,
-            isAvailable: isAvailableValue
-        };
+            let carDTO = {
+                brand: brandValue,
+                model: modelValue,
+                weight: weightValue,
+                isAvailable: isAvailableValue
+            };
 
-        let response = await updateCarById(car.id, carDTO);
-        console.log(response);
-        if(response.length === 0){
-            alert("Car updated with success");
-            createHome();
-        }
-        else{
-            alert(response);
+            container.innerHTML = "",
+            container.appendChild(createSpinner());
+            await delay();
+
+            let response = await updateCarById(car.id, carDTO);
+            console.log(response);
+            if(response === "success"){
+                createHome();
+                container.appendChild(createPositiveAlert("Car updated with success !"));
+            }
         }
     })
 
