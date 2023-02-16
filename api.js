@@ -2,7 +2,7 @@
 
 function api(path, method = "GET", body = null){
 
-    const url = "http://localhost:8080/" + path;
+    const url = "http://localhost:9090/" + path;
 
     const options = {
         method,
@@ -71,7 +71,7 @@ async function addCar(car){
 async function updateCarById(id, carDto){
     let response = await api("crudJS/car/" + `${id}`, "PUT", carDto);
     if(response.status === 200){
-        return [];
+        return "success";
     }
     else if(response.status === 400){
         return response.json().then(data => {
